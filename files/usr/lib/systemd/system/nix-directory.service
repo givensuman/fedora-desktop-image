@@ -9,7 +9,13 @@ RequiresMountsFor=/var
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/install -dm0755 -o root -g root /var/nix
-ExecStart=/usr/sbin/restorecon -F /var/nix
+ExecStart=/usr/bin/install -dm1775 -o root -g nixbld /var/nix/store
+ExecStart=/usr/bin/install -dm0755 -o root -g root /var/nix/var
+ExecStart=/usr/bin/install -dm0755 -o root -g root /var/nix/var/nix
+ExecStart=/usr/bin/install -dm0755 -o root -g root /var/nix/var/nix/daemon-socket
+ExecStart=/usr/bin/install -dm0755 -o root -g root /var/nix/var/nix/profiles
+ExecStart=/usr/bin/install -dm1777 -o root -g root /var/nix/var/nix/profiles/per-user
+ExecStart=/usr/sbin/restorecon -RF /var/nix
 RemainAfterExit=yes
 
 [Install]
