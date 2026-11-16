@@ -16,6 +16,6 @@ COPY ./files /
 COPY --from=selinux /selinux/nix.pp /usr/share/selinux/packages/
 RUN semodule -i /usr/share/selinux/packages/nix.pp
 
-RUN systemctl enable nix-directory.service nix.mount
+RUN systemctl enable nix-directory.service nix.mount nix-daemon.socket
 
 RUN bootc container lint
