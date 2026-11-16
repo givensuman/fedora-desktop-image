@@ -29,6 +29,7 @@ jobs:
         with:
           containerfiles: |
             ./Containerfile
+          image: fedora-nix-image
           tags: latest
 
       - name: Push To GHCR
@@ -41,6 +42,9 @@ jobs:
         with:
           image: ${{ steps.build_image.outputs.image }}
           tags: ${{ steps.build_image.outputs.tags }}
+          registry: ghcr.io/${{ github.actor }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
           extra-args: |
             --disable-content-trust
 
