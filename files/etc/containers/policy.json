@@ -1,0 +1,41 @@
+{
+    "default": [
+        {
+            "type": "insecureAcceptAnything"
+        }
+    ],
+    "transports": {
+        "docker": {
+            "registry.access.redhat.com": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPath": "/etc/pki/sigstore/SIGSTORE-redhat-release3",
+                    "rekorPublicKeyPath": "/etc/pki/sigstore/REKOR-signing-key"
+                }
+            ],
+            "registry.redhat.io": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPath": "/etc/pki/sigstore/SIGSTORE-redhat-release3",
+                    "rekorPublicKeyPath": "/etc/pki/sigstore/REKOR-signing-key"
+                }
+            ],
+            "ghcr.io/givensuman/fedora-desktop-image": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPath": "/etc/pki/containers/givensuman.pub",
+                    "signedIdentity": {
+                        "type": "matchRepository"
+                    }
+                }
+            ]
+        },
+        "docker-daemon": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        }
+    }
+}
