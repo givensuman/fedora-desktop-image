@@ -6,7 +6,7 @@ set -euo pipefail
 dnf5 install -y @cosmic-desktop-environment
 systemctl enable cosmic-greeter.service
 
-dnf copr enable mjakeman/system76-scheduler
+dnf5 -y copr enable mjakeman/system76-scheduler
 dnf5 -y install system76-scheduler
 systemctl enable com.system76.Scheduler.service
 

@@ -1,21 +1,25 @@
-FROM fedora as selinux
+# ---
+# hadolint ignore=DL3007
+FROM ghcr.io/givensuman/fedora-nix-image:latest AS nix
+# hadolint ignore=DL3007
+FROM ghcr.io/givensuman/fedora-akmods-image:latest
 
-WORKDIR /selinux
-COPY ./selinux /selinux
+RUN dnf5 -y install nix nix-daemon && dnf5 clean all
 
-RUN dnf install -y selinux-policy-devel policycoreutils-devel && \
-	make -f /usr/share/selinux/devel/Makefile nix.pp
+COPY --from=nix /usr/lib/systemd/system/nix-directory.service \
+                /usr/lib/systemd/system/nix.mount \
+                /usr/lib/systemd/system/
+COPY --from=nix /usr/share/selinux/packages/nix.pp /usr/share/selinux/packages/
 
-FROM quay.io/fedora/fedora-bootc
+RUN semodule -i /usr/share/selinux/packages/nix.pp && \
+    systemctl enable nix-directory.service nix.mount nix-daemon.socket
 
-RUN rpm-ostree install \
-	nix nix-daemon
+COPY files/ /
 
-COPY ./files /
-
-COPY --from=selinux /selinux/nix.pp /usr/share/selinux/packages/
-RUN semodule -i /usr/share/selinux/packages/nix.pp
-
-RUN systemctl enable nix-directory.service nix.mount nix-daemon.socket
+COPY build/ /tmp/build/
+RUN chmod +x /tmp/build/*.sh && \
+    /tmp/build/desktop.sh && \
+    /tmp/build/flatpak.sh && \
+    rm -rf /tmp/build /tmp/* /var/cache/* /var/lib/dnf /var/log/dnf5.log* /run/dnf
 
 RUN bootc container lint
