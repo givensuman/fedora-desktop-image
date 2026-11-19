@@ -23,9 +23,9 @@ dnf5 install -y "${DESKTOP_PACKAGES[@]}"
 
 EXCLUDED_PACKAGES=(
     cosmic-store  # Prefer GTK alternatives
-    cosmic-edit   # ""
     cosmic-player # ""
     cosmic-reader # ""
+    # cosmic-edit # Removal breaks COSMIC at the moment
     # Prefer flatpak version
     firefox
     firefox-langpacks
