@@ -6,10 +6,6 @@ set -euo pipefail
 dnf5 install -y @cosmic-desktop-environment
 systemctl enable cosmic-greeter.service
 
-dnf5 -y copr enable mjakeman/system76-scheduler
-dnf5 -y install system76-scheduler
-systemctl enable com.system76.Scheduler.service
-
 DESKTOP_PACKAGES=(
     wl-clipboard
     age
@@ -36,7 +32,5 @@ for pkg in "${EXCLUDED_PACKAGES[@]}"; do
         dnf5 remove -y "${pkg}"
     fi
 done
-
-dnf5 -y copr disable mjakeman/system76-scheduler
 
 echo "::endgroup::"
