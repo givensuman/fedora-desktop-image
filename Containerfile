@@ -16,6 +16,7 @@ COPY files/ /
 
 COPY build/ /tmp/build/
 RUN chmod +x /tmp/build/*.sh && \
+    /tmp/build/setup.sh && \
     /tmp/build/desktop.sh && \
     /tmp/build/flatpak.sh && \
     /tmp/build/packages.sh && \
