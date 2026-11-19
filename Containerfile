@@ -1,18 +1,16 @@
 # ---
 # hadolint ignore=DL3007
-FROM ghcr.io/givensuman/fedora-nix-image:latest AS nix
+FROM ghcr.io/givensuman/fedora-akmods-image:latest AS akmods
 # hadolint ignore=DL3007
-FROM ghcr.io/givensuman/fedora-akmods-image:latest
+FROM ghcr.io/givensuman/fedora-nix-image:latest AS nix
 
-RUN dnf5 -y install nix nix-daemon && dnf5 clean all
+FROM quay.io/fedora/fedora-bootc
 
-COPY --from=nix /usr/lib/systemd/system/nix-directory.service \
-                /usr/lib/systemd/system/nix.mount \
-                /usr/lib/systemd/system/
-COPY --from=nix /usr/share/selinux/packages/nix.pp /usr/share/selinux/packages/
-
-RUN semodule -i /usr/share/selinux/packages/nix.pp && \
-    systemctl enable nix-directory.service nix.mount nix-daemon.socket
+COPY --from=akmods /usr/share/modules/akmods /tmp/modules/akmods
+COPY --from=nix /usr/share/modules/nix /tmp/modules/nix
+RUN /tmp/modules/akmods/apply.sh && \
+    /tmp/modules/nix/apply.sh && \
+    rm -rf /tmp/modules
 
 COPY files/ /
 
