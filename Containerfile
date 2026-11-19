@@ -18,6 +18,7 @@ COPY build/ /tmp/build/
 RUN chmod +x /tmp/build/*.sh && \
     /tmp/build/desktop.sh && \
     /tmp/build/flatpak.sh && \
-    rm -rf /tmp/build /tmp/* /var/cache/* /var/lib/dnf /var/log/dnf5.log* /run/dnf
+    /tmp/build/packages.sh && \
+    /tmp/build/cleanup.sh
 
 RUN bootc container lint

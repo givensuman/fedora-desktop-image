@@ -37,4 +37,6 @@ for pkg in "${EXCLUDED_PACKAGES[@]}"; do
     fi
 done
 
+dnf5 -y copr disable mjakeman/system76-scheduler
+
 echo "::endgroup::"
