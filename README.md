@@ -1,8 +1,8 @@
-![fedora-nix-image logo](./assets/logo.png)
+![fedora-desktop-image logo](./assets/logo.png)
 
-# fedora-nix-image
+# fedora-desktop-image
 
-a fedora image configured with nix
+a fedora image for my desktop
 
 ### Usage
 
@@ -11,47 +11,26 @@ This is a `bootc` image, meaning it's meant for live systems (or VMs) rather tha
 You can rebase to it from another `bootc` system with:
 
 ```bash
-sudo bootc switch ghcr.io/givensuman/fedora-nix-image
+SRC=ghcr.io/givensuman/fedora-desktop-image
+cosign verify --key cosign.pub "$SRC"
+sudo bootc switch "$SRC"
 ```
 
-although you probably don't want that as this image does not have a graphical environment configured.
-
-For most uses, this will be a layer in custom images:
-
-```Dockerfile
-FROM ghcr.io/givensuman/fedora-nix-image
-
-RUN dnf5 -y install @gnome-desktop
-
-RUN bootc container lint
+```bash
+chezmoi init givensuman/fedora-desktop-image \
+	--apply \
+	--recurse-submodules \
+	--exclude=encrypted \
+	--skip-secrets
 ```
 
-or as a build step, with something like:
+![screenshot of live desktop](./assets/screenshot.png)
 
-```Dockerfile
-FROM ghcr.io/givensuman/fedora-nix-image AS nix
-FROM quay.io/fedora/fedora-silverblue
+### See Also
 
-RUN dnf5 -y install nix nix-daemon
+[givensuman/fedora-nix-image](https://github.com/givensuman/fedora-nix-image)
 
-COPY --from=nix /usr/lib/systemd/system/nix-directory.service \
-                /usr/lib/systemd/system/nix.mount \
-                /usr/lib/systemd/system/
-COPY --from=nix /usr/share/selinux/packages/nix.pp /usr/share/selinux/packages/
-
-RUN semodule -i /usr/share/selinux/packages/nix.pp && \
-    systemctl enable nix-directory.service nix.mount nix-daemon.socket
-
-RUN bootc container lint
-```
-
-### Why?
-
-Immutable systems via `bootc` and NixOS sit at an interesting crossroads. The workflows of NixOS have become something I've relied on over my past year or two using it, but the declarative way of defining an entire system can be more work than it's worth, especially when you're just trying to, say, play Minecraft on your dang old computer.
-
-`bootc` systems make this easy and keep elements of reproducibility cherished by NixOS users, at the cost of an imperative build system with... slow builds.
-
-I wanted to define a highly stable system with `bootc` and declare work environments for day-to-day tasks with Nix. Turns out, this is [somewhat controversial](https://github.com/ublue-os/main/issues/765). I also didn't find a working alternative, so here you go.
+[givensuman/fedora-akmods-image](https://github.com/givensuman/fedora-akmods-image)
 
 ### License
 
