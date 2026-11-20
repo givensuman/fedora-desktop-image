@@ -3,7 +3,7 @@
 FROM ghcr.io/givensuman/fedora-akmods-image:latest AS akmods
 # hadolint ignore=DL3007
 FROM ghcr.io/givensuman/fedora-nix-image:latest AS nix
-
+# hadolint ignore=DL3007
 FROM quay.io/fedora/fedora-bootc
 
 COPY --from=akmods /usr/share/modules/akmods /tmp/modules/akmods
@@ -20,6 +20,7 @@ RUN chmod +x /tmp/build/*.sh && \
     /tmp/build/desktop.sh && \
     /tmp/build/flatpak.sh && \
     /tmp/build/packages.sh && \
+    /tmp/build/initramfs.sh && \
     /tmp/build/cleanup.sh
 
 RUN bootc container lint
