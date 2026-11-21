@@ -11,4 +11,8 @@ ln -sf sudo-rs /usr/bin/sudoedit
 ln -sf visudo-rs /usr/bin/visudo
 chmod 0440 /etc/sudoers.d/10-nix-path
 
+dnf5 -y remove console-login-helper-messages-profile
+
+systemctl mask systemd-remount-fs.service
+
 echo "::endgroup::"

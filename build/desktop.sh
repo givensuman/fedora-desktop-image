@@ -5,6 +5,7 @@ set -euo pipefail
 
 dnf5 install -y @cosmic-desktop-environment
 systemctl enable cosmic-greeter.service
+systemctl mask com.system76.Scheduler.service
 
 DESKTOP_PACKAGES=(
     wl-clipboard
