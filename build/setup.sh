@@ -3,7 +3,13 @@
 echo "::group:: ===$(basename "$0")==="
 set -euo pipefail
 
-dnf5 -y install dnf-plugins-core
+CORE_PACKAGES=(
+    git
+    git-lfs
+    dnf-plugins-core
+)
+
+dnf5 install -y "${CORE_PACKAGES[@]}"
 
 dnf5 -y install sudo-rs
 ln -sf sudo-rs /usr/bin/sudo
