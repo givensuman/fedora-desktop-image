@@ -5,7 +5,7 @@ set -euo pipefail
 
 mkdir -p /etc/systemd/system
 
-# Create Flatpak preinstall service
+# Create flatpak-preinstall.service
 # https://github.com/ublue-os/bluefin/blob/main/system_files/shared/usr/lib/systemd/system/flatpak-preinstall.service
 cat <<\EOF >>/etc/systemd/system/flatpak-preinstall.service
 [Unit]

@@ -1,3 +1,0 @@
-docker:
-  ghcr.io/givensuman/fedora-desktop-image:
-    use-sigstore-attachments: true
